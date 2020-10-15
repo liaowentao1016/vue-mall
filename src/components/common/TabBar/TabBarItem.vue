@@ -45,7 +45,6 @@ export default {
   font-size: 0.28rem;
 }
 .tab-bar-item img {
-  margin-top: 0.04rem;
   width: 0.4rem;
   height: 0.4rem;
 }

@@ -54,3 +54,11 @@ a {
 .right {
   float: right;
 }
+
+/*如果我们屏幕超过了750px 就按照750px 的稿件来 不让页面超过750px*/
+
+@media screen and (min-width: 750px) {
+  html {
+    font-size: 50px !important;
+  }
+}

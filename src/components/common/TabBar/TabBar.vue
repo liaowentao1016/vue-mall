@@ -7,7 +7,7 @@
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <style  scoped>
@@ -21,6 +21,7 @@ export default {};
 
 #tab-bar {
   display: flex;
+  align-items: center;
   height: 7vh;
   background-color: #ebebeb;
   box-shadow: 0 -1px 1px 1px rgba(0, 0, 0, 0.1);
