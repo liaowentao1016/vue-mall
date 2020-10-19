@@ -9,7 +9,16 @@
 <script>
 import BScroll from 'better-scroll'
 export default {
-  props: ['probeType', 'pullUpLoad'],
+  props: {
+    probeType: {
+      type: Number,
+      default: 0
+    },
+    pullUpLoad: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       scroll: null
@@ -38,10 +47,12 @@ export default {
       })
 
       // 监听上拉加载更多功能
-      this.scroll.on('pullingUp', () => {
-        // 通过自定义事件将该方法的具体处理过程放到父组件去处理
-        this.$emit('pullingUp')
-      })
+      if (this.pullUpLoad) {
+        this.scroll.on('pullingUp', () => {
+          // 通过自定义事件将该方法的具体处理过程放到父组件去处理
+          this.$emit('pullingUp')
+        })
+      }
     })
   },
   methods: {

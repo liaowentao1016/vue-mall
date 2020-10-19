@@ -7,11 +7,7 @@
       @touchend="touchEnd"
       :style="swiperStyle"
     >
-      <div class="swiper-slide" v-for="(item, index) in banners" :key="index">
-        <a :href="item.link">
-          <img :src="item.image" alt="" @load="swiperImgLoad" />
-        </a>
-      </div>
+      <slot></slot>
     </div>
 
     <!--底部小圆点-->
@@ -28,7 +24,6 @@
 
 <script>
 export default {
-  props: ['banners'],
   data() {
     return {
       // 底部小圆点的个数
@@ -217,19 +212,6 @@ export default {
 .swiper {
   display: flex;
 }
-.swiper-slide {
-  width: 100%;
-  flex-shrink: 0; /* 防止元素被挤压 */
-}
-.swiper-slide a {
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-}
-.swiper-slide img {
-  width: 100%;
-}
-
 .circle-box {
   display: flex;
   position: absolute;

@@ -22,7 +22,13 @@
       @pullingUp="pullingUp"
     >
       <!--轮播-->
-      <swiper :banners="banners" class="swiper-box" @swiperImgLoad="swiperImgLoad"></swiper>
+      <swiper class="swiper-box" @swiperImgLoad="swiperImgLoad">
+        <swiper-item v-for="(item, index) in banners" :key="index">
+          <a :href="item.link">
+            <img :src="item.image" alt="" @load="swiperImgLoad" />
+          </a>
+        </swiper-item>
+      </swiper>
 
       <!--推荐-->
       <recommend :recommend="recommend"></recommend>
@@ -50,17 +56,17 @@
 // 导入组件
 import NavBar from 'components/common/navbar/navBar'
 import swiper from 'components/common/swiper/swiper'
+import swiperItem from 'components/common/swiper/swiperItem'
 import recommend from 'views/home/childrenComponents/recommend'
 import featureView from 'views/home/childrenComponents/featureView'
 import goods from 'components/content/goods/goods'
 import scroll from 'components/common/scroll/scroll'
-import goTop from 'components/content/goTop/goTop'
 
 import tabControl from 'components/content/tabControl/tabControl'
 
 import { getHomeData, getHomeGoods } from 'network/home'
 
-import { debounce } from 'common/utils'
+import { itemImgLoadMix, backTop } from 'common/mixin'
 
 export default {
   name: 'carrousel',
@@ -78,8 +84,6 @@ export default {
       },
       // 默认展示pop的数据
       currentType: 'pop',
-      // 默认隐藏返回顶部组件
-      isShowGoTop: false,
       // 储存tabControl的offsetTop值
       tabControlOffsetTop: 0,
       // 控制吸顶效果的TabControl的显示与隐藏
@@ -88,16 +92,17 @@ export default {
       saveScrollY: 0
     }
   },
+  mixins: [itemImgLoadMix, backTop],
   // 注册组件
   components: {
     NavBar,
     swiper,
+    swiperItem,
     recommend,
     featureView,
     tabControl,
     goods,
-    scroll,
-    goTop
+    scroll
   },
   created() {
     this.getHomeDataComp()
@@ -108,13 +113,13 @@ export default {
   },
   mounted() {
     // 由于该函数要被执行多次可以对其进行防抖处理
-    const refresh = debounce(this.$refs.scroll.refresh, 100)
-    // 通过事件总线监听每张图片加载完成
-    this.$bus.$on('itemImgLoad', () => {
-      // 每一张图片加载完成都要重新计算一下Better-Scorll的可滚动高度
-      // this.$refs.scroll.refresh()
-      refresh()
-    })
+    // const refresh = debounce(this.$refs.scroll.refresh, 100)
+    // // 通过事件总线监听每张图片加载完成
+    // this.$bus.$on('itemImgLoad', () => {
+    //   // 每一张图片加载完成都要重新计算一下Better-Scorll的可滚动高度
+    //   // this.$refs.scroll.refresh()
+    //   refresh()
+    // })
   },
   methods: {
     // 获取轮播图数据和推荐数据
@@ -147,10 +152,6 @@ export default {
       }
       this.$refs.tabControl1.currentIndex = this.$refs.tabControl2.currentIndex = index
     },
-    // 返回顶部
-    goTopClick() {
-      this.$refs.scroll.scrollTo(0, 0)
-    },
     // 监听better-scroll的滑动事件
     scrollContnet(position) {
       // 控制返回顶部组件的显示与隐藏
@@ -182,7 +183,10 @@ export default {
   },
   // 离开home组件 保存当前滑动的位置
   deactivated() {
+    // 保存滑动的Y值
     this.saveScrollY = this.$refs.scroll.getScrollY()
+    // 不在监听itemImgLoad事件
+    this.$bus.$off('itemImgLoad', this.itemImgListener)
   }
 }
 </script>
