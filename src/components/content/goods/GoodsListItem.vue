@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="goodsItemClick">
-    <img :src="showImg" alt="" @load="itemImgLoad" />
+    <img :src="showImg" alt="" @load="itemImgLoad" :key="showImg" />
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">￥{{ goodsItem.price }}</span>

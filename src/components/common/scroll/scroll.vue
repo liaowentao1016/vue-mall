@@ -36,7 +36,8 @@ export default {
         // 实时监测滑动的位置 X,Y坐标
         probeType: this.probeType,
         // 开启上拉加载更多功能
-        pullUpLoad: this.pullUpLoad
+        pullUpLoad: this.pullUpLoad,
+        useTransition: false // 解决滚动时出现异常回弹
       })
       console.log(this.scroll)
 

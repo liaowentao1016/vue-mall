@@ -10,7 +10,7 @@
       <detail-comment-info :commentInfo="commentInfo" ref="comment"></detail-comment-info>
       <goods :goodsList="recommend" ref="recommend" />
     </scroll>
-    <detail-bottom-bar />
+    <detail-bottom-bar @addToCart="addToCart" />
     <!--返回顶部组件 .native监听组件的原生事件-->
     <go-top @click.native="goTopClick" v-show="isShowGoTop"></go-top>
   </div>
@@ -138,9 +138,23 @@ export default {
           this.$refs.nav.currentIndex = this.currentIndex
         }
       }
+    },
+    // 加入购物车
+    addToCart() {
+      // 获取加入购物车商品的数据
+      const carData = {}
+      carData.image = this.topImg[0]
+      carData.title = this.goods.title
+      carData.desc = this.goods.desc
+      carData.price = this.goods.realPrice
+      carData.iid = this.id
+      // 将商品添加到购物车
+      this.$store.dispatch('addCar', carData).then(res => {
+        // 添加购物车操作完成之后弹出提示信息
+        this.$toast.show(res)
+      })
     }
   },
-  mounted() {},
   destroyed() {
     // 取消全局事件的监听
     this.$bus.$off('itemImgLoad', this.itemImgListener)
