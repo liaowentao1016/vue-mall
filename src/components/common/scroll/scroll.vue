@@ -17,6 +17,10 @@ export default {
     pullUpLoad: {
       type: Boolean,
       default: false
+    },
+    bounce: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -37,7 +41,8 @@ export default {
         probeType: this.probeType,
         // 开启上拉加载更多功能
         pullUpLoad: this.pullUpLoad,
-        useTransition: false // 解决滚动时出现异常回弹
+        useTransition: false, // 解决滚动时出现异常回弹
+        bounce: this.bounce // 是否启用回弹效果
       })
       console.log(this.scroll)
 

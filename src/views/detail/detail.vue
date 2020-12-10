@@ -5,9 +5,18 @@
       <detail-swiper :topImg="topImg"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
-      <detail-goods-info :detailInfo="detailInfo" @imgLoad="imgLoad"></detail-goods-info>
-      <detail-params-info :paramInfo="paramInfo" ref="params"></detail-params-info>
-      <detail-comment-info :commentInfo="commentInfo" ref="comment"></detail-comment-info>
+      <detail-goods-info
+        :detailInfo="detailInfo"
+        @imgLoad="imgLoad"
+      ></detail-goods-info>
+      <detail-params-info
+        :paramInfo="paramInfo"
+        ref="params"
+      ></detail-params-info>
+      <detail-comment-info
+        :commentInfo="commentInfo"
+        ref="comment"
+      ></detail-comment-info>
       <goods :goodsList="recommend" ref="recommend" />
     </scroll>
     <detail-bottom-bar @addToCart="addToCart" />
@@ -30,7 +39,13 @@ import scroll from 'components/common/scroll/scroll'
 
 import goods from 'components/content/goods/goods'
 
-import { getDetailDataById, Goods, Shop, GoodsParam, getRecommend } from 'network/detail'
+import {
+  getDetailDataById,
+  Goods,
+  Shop,
+  GoodsParam,
+  getRecommend
+} from 'network/detail'
 
 import { itemImgLoadMix, backTop } from 'common/mixin'
 
@@ -73,17 +88,24 @@ export default {
   methods: {
     async getDetailData() {
       const res = await getDetailDataById(this.id)
-      const data = res.result
+      const data = res && res.result
       // 轮播图数据
-      this.topImg = data.itemInfo.topImages
+      this.topImg = data.itemInfo && data.itemInfo.topImages
       // 获取商品信息
-      this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services)
+      this.goods = new Goods(
+        data.itemInfo,
+        data.columns,
+        data.shopInfo.services
+      )
       // 创建店铺信息对象
       this.shop = new Shop(data.shopInfo)
       // 获取商品详细信息
       this.detailInfo = data.detailInfo
       // 获取商品参数信息
-      this.paramInfo = new GoodsParam(data.itemParams.info, data.itemParams.rule)
+      this.paramInfo = new GoodsParam(
+        data.itemParams.info,
+        data.itemParams.rule
+      )
       // 获取评论信息
       if (data.rate.cRate > 0) {
         this.commentInfo = data.rate.list[0]
